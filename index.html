@@ -47,7 +47,12 @@
 
   html { scroll-behavior: smooth; }
   body {
-    background: #0B0B0F;
+    background:
+      radial-gradient(55% 45% at 82% -5%, rgba(212,168,87,0.22), transparent 62%),
+      radial-gradient(50% 45% at 6% 6%, rgba(123,90,184,0.18), transparent 62%),
+      radial-gradient(65% 55% at 50% 110%, rgba(212,168,87,0.12), transparent 62%),
+      #0B0B0F;
+    background-attachment: fixed;
     font-family: 'Vazirmatn', sans-serif;
     line-height: 1.85;                 /* Persian needs more breathing room */
     letter-spacing: 0;                 /* never track Persian — it breaks letter joins */
@@ -68,7 +73,17 @@
     content:""; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.035;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .glow{ position:absolute; border-radius:9999px; filter:blur(90px); opacity:.45; pointer-events:none; will-change:transform; }
+  /* faint gold structural grid across the page */
+  .bg-grain::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(212,168,87,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,168,87,0.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image: radial-gradient(circle at 50% 24%, #000 0%, transparent 78%);
+    mask-image: radial-gradient(circle at 50% 24%, #000 0%, transparent 78%);
+  }
+  .glow{ position:absolute; border-radius:9999px; filter:blur(64px); opacity:.55; pointer-events:none; will-change:transform; }
   @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(40px,34px) scale(1.12);} }
   @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-36px,-44px) scale(1.18);} }
   @keyframes drift3{ 0%,100%{ transform:translate(-50%,0) scale(1); opacity:.18;} 50%{ transform:translate(-50%,-40px) scale(1.25); opacity:.3;} }
@@ -528,7 +543,7 @@
           const a=parts[i], b=parts[j];
           const d = Math.hypot(a.x-b.x, a.y-b.y);
           if(d < MAXDIST){
-            ctx.strokeStyle = 'rgba('+GOLD+','+(0.16*(1-d/MAXDIST))+')';
+            ctx.strokeStyle = 'rgba('+GOLD+','+(0.22*(1-d/MAXDIST))+')';
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
           }
@@ -541,7 +556,7 @@
         }
       }
       for(const p of parts){
-        ctx.fillStyle = 'rgba('+GOLD+',0.75)';
+        ctx.fillStyle = 'rgba('+GOLD+',0.9)';
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
       }
       raf = requestAnimationFrame(step);
